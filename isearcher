@@ -1,0 +1,30 @@
+#! /bin/sh
+JAVA=`which java`
+CP=$CLASS_PATH
+MAIN=info.thinkingcloud.isearcher.Application
+
+if [[ -z $CP ]];
+then
+	CP=.
+else
+	CP=.:$CP
+fi
+
+# Test if we are in development mode
+if [[ -d target ]];
+then
+	# Yes, we are in developing mode
+	echo "Running in development mode..."
+	CP=$CP:target/classes
+	for file in $(find target/lib -name "*.jar")
+	do
+		CP=$CP:$file
+	done
+else
+	# No, we are in production mode
+	for file in $(find lib -name "*.jar")
+	do
+		CP=$CP:$file
+	done
+fi
+$JAVA -cp $CP $MAIN $*

@@ -1,0 +1,50 @@
+-
+    name: General
+    options:
+        -
+            doc: This help message
+            option: help
+            short: h
+            command: help
+        -
+            doc: The version of isearcher
+            option: version
+            short: v
+            command: version
+        -
+            doc: The folder that the lucene index locate, if not set, will use .index folder in current working directory
+            option: index_dest
+            short: d
+            args: true
+            command: set
+-
+    name: Indexing
+    options:
+        -
+            doc: Create the lucene index, you can set the folder to index
+            option: create
+            short: c
+            command: create
+        -
+            doc: Update the lucene index, isearcher will store the modify time of every indexed document, and if the document is changed(modify time is changed, or the file don't have any modify time stored), will update the index of this document in the lucene index
+            option: update
+            short: u
+            command: update
+-
+    name: Index Folder
+    options:
+        -
+            doc: The folder that needs to be indexed
+            option: index_folder
+            short: i
+            args: true
+            command: set
+-
+    name: Index Exclude
+    options:
+        -
+            doc: The pattern that should exclude(can use regex to filter)
+            option: exclude
+            short: e
+            args: true
+            command: set
