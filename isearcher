@@ -1,30 +1,47 @@
 #! /bin/sh
+
+ARGS=$*
+# Find isearcher dir first
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+	TARGET="$(readlink "$SOURCE")"
+	if [[ $SOURCE == /* ]]; then
+		SOURCE="$TARGET"
+	else
+		DIR="$( dirname "$SOURCE" )"
+		SOURCE="$DIR/$TARGET" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+	fi
+done
+RDIR="$( dirname "$SOURCE" )"
+HOME="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 JAVA=`which java`
 CP=$CLASS_PATH
 MAIN=info.thinkingcloud.isearcher.Application
 
 if [[ -z $CP ]];
 then
-	CP=.
+	CP=$HOME
 else
-	CP=.:$CP
+	CP=$HOME:$CP
 fi
 
 # Test if we are in development mode
-if [[ -d target ]];
+if [[ -d $HOME/target ]];
 then
 	# Yes, we are in developing mode
 	echo "Running in development mode..."
-	CP=$CP:target/classes
-	for file in $(find target/lib -name "*.jar")
+	CP=$CP:$HOME/target/classes
+	for file in $(find $HOME/target/lib -name "*.jar")
 	do
 		CP=$CP:$file
 	done
 else
 	# No, we are in production mode
-	for file in $(find lib -name "*.jar")
+	for file in $(find $HOME/lib -name "*.jar")
 	do
 		CP=$CP:$file
 	done
 fi
+
 $JAVA -cp $CP $MAIN $*

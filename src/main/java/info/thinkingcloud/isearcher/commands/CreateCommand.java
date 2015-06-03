@@ -20,6 +20,11 @@ public class CreateCommand extends BaseCommand {
 	private LuceneService lucene;
 
 	@Override
+	public int priority() {
+		return LOWEST;
+	}
+
+	@Override
 	public void execute() throws Exception {
 		String indexTarget = configService.config("application.index_folder",
 				configService.getDefaultIndexTarget());
@@ -28,6 +33,5 @@ public class CreateCommand extends BaseCommand {
 		logger.debug("Storing index for folder {} to folder {}", indexTarget,
 				indexDest);
 		lucene.index(indexTarget, indexDest, "");
-
 	}
 }

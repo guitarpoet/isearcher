@@ -1,5 +1,8 @@
 package info.thinkingcloud.isearcher;
 
+import info.thinkingcloud.isearcher.misc.FileContentIterator;
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
@@ -7,6 +10,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 
 import org.apache.commons.io.IOUtils;
 
@@ -21,6 +25,10 @@ public class DocumentModel implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public FileContentIterator iterate() throws FileNotFoundException {
+		return new FileContentIterator(path);
 	}
 
 	public void getContent() throws IOException {
@@ -40,5 +48,21 @@ public class DocumentModel implements Serializable {
 			this.attributes = Files.readAttributes(path,
 					BasicFileAttributes.class);
 		}
+	}
+
+	public FileTime lastModifiedTime() {
+		return attributes.lastModifiedTime();
+	}
+
+	public FileTime lastAccessTime() {
+		return attributes.lastAccessTime();
+	}
+
+	public FileTime creationTime() {
+		return attributes.creationTime();
+	}
+
+	public long size() {
+		return attributes.size();
 	}
 }

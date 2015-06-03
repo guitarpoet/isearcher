@@ -6,7 +6,7 @@ import info.thinkingcloud.isearcher.interfaces.Command;
 
 public abstract class BaseCommand implements Command {
 
-	protected String arg;
+	protected String arg = "";
 
 	protected HashMap<String, Object> config;
 
@@ -17,7 +17,7 @@ public abstract class BaseCommand implements Command {
 
 	@Override
 	public int priority() {
-		return 0;
+		return DEFAULT;
 	}
 
 	@Override

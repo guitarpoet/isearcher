@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,10 @@ public class DirectoryWalkService extends SimpleFileVisitor<Path> {
 			.getLogger(DirectoryWalkService.class);
 	private ArrayList<FileProcessor> processors = new ArrayList<FileProcessor>();
 	private PathMatcher matcher;
+	private static final List<String> DEFAULT_SKIP_FOLDERS = Arrays
+			.asList(new String[] { ".index", ".git", ".cvs", ".svn" });
+	private static final List<String> DEFAULT_SKIP_FILES = Arrays
+			.asList(new String[] { "thumbs.db", ".ds_store" });
 
 	@Autowired
 	private ConfigService config;
@@ -45,7 +51,10 @@ public class DirectoryWalkService extends SimpleFileVisitor<Path> {
 
 	protected void find(Path file) {
 		Path name = file.getFileName();
-		if (name != null && matcher.matches(name)) {
+		if (name != null
+				&& matcher.matches(name)
+				&& !DEFAULT_SKIP_FILES.contains(name.toFile().getName()
+						.toLowerCase())) {
 			fire(file);
 		}
 	}
@@ -58,6 +67,8 @@ public class DirectoryWalkService extends SimpleFileVisitor<Path> {
 
 	@Override
 	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+		if (DEFAULT_SKIP_FOLDERS.contains(dir.toFile().getName().toLowerCase()))
+			return FileVisitResult.SKIP_SUBTREE;
 		find(dir);
 		return CONTINUE;
 	}

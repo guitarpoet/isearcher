@@ -36,7 +36,7 @@
         -
             doc: The folder that needs to be indexed
             option: index_folder
-            short: i
+            short: f
             args: true
             command: set
 -
@@ -55,6 +55,23 @@
             args: true
             command: set
 -
+    name: Case Sensitive
+    options:
+        -
+            doc: If the search is case sensitive
+            option: case_insensitive
+            short: i
+            command: set
+-
+    name: Search Limit
+    options:
+        -
+            doc: Set the search limit
+            option: search_limit
+            short: l
+            args: true
+            command: set
+-
     name: Get Configuration
     options:
         -
@@ -70,5 +87,4 @@
             doc: Do the search
             option: search
             short: s
-            args: true
             command: search

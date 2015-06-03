@@ -10,6 +10,16 @@ import java.util.HashMap;
  */
 public interface Command {
 
+	public static final int HIGHEST = -10;
+
+	public static final int HIGH = -1;
+
+	public static final int DEFAULT = 0;
+
+	public static final int LOW = 1;
+
+	public static final int LOWEST = 10;
+
 	/**
 	 * Execute the command
 	 * 
