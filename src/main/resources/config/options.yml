@@ -40,11 +40,35 @@
             args: true
             command: set
 -
-    name: Index Exclude
+    name: Index Include and Exclude
     options:
         -
-            doc: The pattern that should exclude(can use regex to filter)
+            doc: The pattern that should exclude(using the file system globbing pattern)
             option: exclude
             short: e
             args: true
             command: set
+        -
+            doc: The pattern that should include(using the file system globbing pattern)
+            option: file_name
+            short: n
+            args: true
+            command: set
+-
+    name: Get Configuration
+    options:
+        -
+            doc: Get the configuration
+            option: get
+            short: g
+            args: true
+            command: get
+-
+    name: Search
+    options:
+        -
+            doc: Do the search
+            option: search
+            short: s
+            args: true
+            command: search

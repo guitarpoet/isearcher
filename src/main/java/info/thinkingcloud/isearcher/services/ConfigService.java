@@ -13,7 +13,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -46,11 +48,22 @@ public class ConfigService {
 
 	private Options options;
 
+	public Set<Entry<String, Object>> entrySet() {
+		return config.entrySet();
+	}
+
 	@Autowired
 	private ApplicationContext context;
 
 	public String config(String config) {
 		return getConfig(config);
+	}
+
+	public String config(String config, String defaultValue) {
+		String ret = config(config);
+		if (ret == null)
+			return defaultValue;
+		return ret;
 	}
 
 	public String getConfig(String key) {
@@ -63,6 +76,15 @@ public class ConfigService {
 
 	public void setConfig(String key, Object value) {
 		config.put(key, value);
+	}
+
+	public String getDefaultIndexTarget() {
+		return SystemUtils.getUserDir().getAbsolutePath();
+	}
+
+	public String getDefaultIndexDest() {
+		return FilenameUtils.concat(SystemUtils.getUserDir().getAbsolutePath(),
+				".index");
 	}
 
 	@PostConstruct
@@ -103,9 +125,9 @@ public class ConfigService {
 		for (Option opt : cmd.getOptions()) {
 			HashMap<String, Object> o = optionMap.get(opt.getOpt());
 			String c = (String) o.get("command");
-			Command command = context.containsBean(c) ? context.getBean(c,
-					Command.class) : null;
+			Command command = getCommand(c);
 			if (command != null) {
+				command.init(o);
 				if (opt.hasArg()) {
 					command.setArg(cmd.getOptionValue(opt.getOpt()));
 				}
@@ -119,6 +141,11 @@ public class ConfigService {
 			}
 		});
 		return commands.toArray(new Command[0]);
+	}
+
+	public Command getCommand(String c) {
+		return context.containsBean(c) ? context.getBean(c, Command.class)
+				: null;
 	}
 
 	private void loadConfig(String path) throws FileNotFoundException,

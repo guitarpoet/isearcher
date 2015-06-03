@@ -50,18 +50,24 @@ public class Application {
 		logger.trace("Starting application using args {}",
 				Arrays.toString(args));
 
+		ConfigService config = getService(ConfigService.class);
 		CommandLineParser parser = new DefaultParser();
 		try {
-			get().cmd = parser.parse(getService(ConfigService.class)
-					.getOptions(), args);
+			get().cmd = parser.parse(config.getOptions(), args);
 
-			for (Command command : getService(ConfigService.class)
-					.getCommands()) {
-				command.execute();
+			Command[] commands = config.getCommands();
+			if (commands.length > 0) {
+				for (Command command : commands) {
+					command.execute();
+				}
+			} else {
+				// If we don't have any command, just run help command
+				config.getCommand("help").execute();
 			}
 		} catch (ParseException e) {
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 	}
-
 }

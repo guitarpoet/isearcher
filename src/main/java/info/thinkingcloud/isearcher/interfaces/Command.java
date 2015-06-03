@@ -1,5 +1,7 @@
 package info.thinkingcloud.isearcher.interfaces;
 
+import java.util.HashMap;
+
 /**
  * The command interface
  * 
@@ -13,7 +15,7 @@ public interface Command {
 	 * 
 	 * @param args
 	 */
-	public void execute();
+	public void execute() throws Exception;
 
 	/**
 	 * the priority of this command
@@ -28,4 +30,11 @@ public interface Command {
 	 * @param arg
 	 */
 	public void setArg(String arg);
+
+	/**
+	 * Initialize this command using the configuration
+	 * 
+	 * @param config
+	 */
+	public void init(HashMap<String, Object> config);
 }
