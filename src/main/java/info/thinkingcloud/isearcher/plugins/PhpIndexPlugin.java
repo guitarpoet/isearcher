@@ -4,11 +4,12 @@ import java.nio.file.Path;
 
 import org.springframework.stereotype.Component;
 
-@Component("java_plugin")
-public class JavaIndexPlugin extends ProgrammingLanguageIndexPlugin {
+@Component("php_plugin")
+public class PhpIndexPlugin extends ProgrammingLanguageIndexPlugin {
 
 	@Override
 	public boolean accept(Path path) {
-		return hasExtension(path, ".java");
+		return hasExtension(path, ".php");
 	}
+
 }

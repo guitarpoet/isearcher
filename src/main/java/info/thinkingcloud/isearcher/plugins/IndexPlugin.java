@@ -15,8 +15,14 @@ import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class IndexPlugin implements Plugin {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(IndexPlugin.class);
+
 	public DocumentModel extract(Path path) {
 		DocumentModel model = new DocumentModel();
 		try {
@@ -29,13 +35,11 @@ public abstract class IndexPlugin implements Plugin {
 
 	protected boolean hasExtension(Path path, String extension) {
 		return path != null
-				&& getMatcher(filterText(extension))
-						.matches(path.getFileName());
+				&& getMatcher(extension).matches(path.getFileName());
 	}
 
 	protected PathMatcher getMatcher(String extension) {
-		return FileSystems.getDefault().getPathMatcher(
-				"glob:*" + filterText(extension));
+		return FileSystems.getDefault().getPathMatcher("glob:*" + extension);
 	}
 
 	public void index(Path path, IndexWriter writer) throws IOException {
@@ -55,6 +59,9 @@ public abstract class IndexPlugin implements Plugin {
 			doc.add(new LongField("line", i++, YES));
 			String text = iter.next();
 			doc.add(new StringField("orig_text", text, YES));
+
+			logger.trace("Indexing text {} using index plugin {}",
+					filterText(text), this);
 			doc.add(new TextField("text", filterText(text), YES));
 			doc.add(new TextField("text_lower", filterText(text).toLowerCase(),
 					YES));
