@@ -15,13 +15,8 @@ import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class IndexPlugin implements Plugin {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(IndexPlugin.class);
 
 	public DocumentModel extract(Path path) {
 		DocumentModel model = new DocumentModel();
@@ -60,8 +55,6 @@ public abstract class IndexPlugin implements Plugin {
 			String text = iter.next();
 			doc.add(new StringField("orig_text", text, YES));
 
-			logger.trace("Indexing text {} using index plugin {}",
-					filterText(text), this);
 			doc.add(new TextField("text", filterText(text), YES));
 			doc.add(new TextField("text_lower", filterText(text).toLowerCase(),
 					YES));

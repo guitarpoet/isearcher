@@ -11,9 +11,9 @@ import java.util.List;
  */
 public abstract class ProgrammingLanguageIndexPlugin extends IndexPlugin {
 
-	private static final List<String> opers = Arrays.asList(",", ".", ";", "!",
-			"~", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "=",
-			"\\", "[", "]", "/");
+	private static final List<String> opers = Arrays.asList(",", ".", ":", ";",
+			"!", "~", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=",
+			"\\", "[", "]", "/", "\"", "'");
 
 	@Override
 	protected String filterText(String text) {

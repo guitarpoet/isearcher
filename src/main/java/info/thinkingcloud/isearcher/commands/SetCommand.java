@@ -12,6 +12,11 @@ public class SetCommand extends BaseCommand {
 	private ConfigService configService;
 
 	@Override
+	public int priority() {
+		return HIGHEST;
+	}
+
+	@Override
 	public void execute() {
 		configService.setConfig(
 				"application." + (String) this.config.get("option"), this.arg);
